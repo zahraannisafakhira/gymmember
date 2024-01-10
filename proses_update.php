@@ -22,6 +22,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors[] = "Nomor HP tidak boleh kosong.";
     }
 
+    //  hai
+    //hai juga
     if (empty($email)) {
         $errors[] = "Email tidak boleh kosong.";
     }
