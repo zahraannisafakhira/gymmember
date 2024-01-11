@@ -15,10 +15,10 @@ if ($koneksi->connect_error) {
 $search = isset($_GET['search']) ? $koneksi->real_escape_string($_GET['search']) : '';
 
 // Handle filter for id_pembeli
-$memberIdFilter = isset($_GET['member_id']) ? $koneksi->real_escape_string($_GET['member_id']) : '';
+$memberIdFilter = isset($_GET['class_id']) ? $koneksi->real_escape_string($_GET['class_id']) : '';
 
 // Handle filter for nama
-$nameFilter = isset($_GET['member_name']) ? $koneksi->real_escape_string($_GET['member_name']) : '';
+$nameFilter = isset($_GET['class_name']) ? $koneksi->real_escape_string($_GET['class_name']) : '';
 
 // Pagination config for the search results
 $resultsPerPage = 7;
@@ -29,23 +29,23 @@ $offset = ($currentPage - 1) * $resultsPerPage;
 $whereClause = "WHERE 1";
 
 if (!empty($search)) {
-    $whereClause .= " AND (member_id LIKE '%$search%' OR member_name LIKE '%$search%')";
+    $whereClause .= " AND (class_id LIKE '%$search%' OR class_name LIKE '%$search%')";
 }
 
 if (!empty($memberIdFilter)) {
-    $whereClause .= " AND member_id = '$memberIdFilter'";
+    $whereClause .= " AND class_id = '$memberIdFilter'";
 }
 
 if (!empty($nameFilter)) {
-    $whereClause .= " AND member_name = '$nameFilter'";
+    $whereClause .= " AND class_name = '$nameFilter'";
 }
 
 // Query to retrieve filtered data with pagination
-$sql = "SELECT * FROM member $whereClause LIMIT $offset, $resultsPerPage";
+$sql = "SELECT * FROM class $whereClause LIMIT $offset, $resultsPerPage";
 $result = $koneksi->query($sql);
 
 // Query to count total results for pagination
-$countSql = "SELECT COUNT(*) as total FROM member $whereClause";
+$countSql = "SELECT COUNT(*) as total FROM class $whereClause";
 $countResult = $koneksi->query($countSql);
 $totalCount = $countResult->fetch_assoc()['total'];
 
@@ -60,7 +60,7 @@ $totalPages = ceil($totalCount / $resultsPerPage);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Member</title>
+    <title>Data Class</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -142,7 +142,7 @@ $totalPages = ceil($totalCount / $resultsPerPage);
 
 <body>
     <div class="container">
-        <h1>Data Member</h1>
+        <h1>Data Class</h1>
 
         <!-- Search form -->
         <form class="form-inline">
@@ -158,14 +158,10 @@ $totalPages = ceil($totalCount / $resultsPerPage);
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Member ID</th>
-                    <th>Name</th>
-                    <th>Phone Number</th>
-                    <th>Email</th>
-                    <th>ID Class</th>
-                    <th>Payment Status</th>
+                    <th>Class ID</th>
+                    <th>Class Name</th>
+                    <th>Price</th>
                     <th>Action</th>
-                </tr>
             </thead>
             <tbody>
                 <?php
@@ -173,17 +169,14 @@ $totalPages = ceil($totalCount / $resultsPerPage);
                 if ($result) {
                     while ($row = $result->fetch_assoc()) {
                         echo "<tr>";
-                        echo "<td>" . htmlspecialchars($row['member_id']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['member_name']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['phone_number']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['email']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['class_id']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['payment_status']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['class_name']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['price']) . "</td>";
 
                         echo '<td>
-                            <a href="update.php?member_id=' . $row['member_id'] . '">Update</a> 
-                            <a href="delete.php?member_id=' . $row['member_id'] . '">Delete</a>
-                            <a href="detailmember.php?member_id=' . $row['member_id'] . '">Details</a>
+                            <a href="updateclass.php?class_id=' . $row['class_id'] . '">Update</a> 
+                            <a href="deleteclass.php?class_id=' . $row['class_id'] . '">Delete</a>
+                            <a href="detailclass.php?class_id=' . $row['class_id'] . '">Details</a>
                             </td>';
                         echo "</tr>";
                     }
